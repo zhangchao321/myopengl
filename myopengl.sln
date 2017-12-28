@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "threadedqopenglwidget", "th
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfwwindow", "glfwwindow\glfwwindow.vcxproj", "{8CC7F3C8-BC85-41AD-BCC6-E4C7EAEED63D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "triangle", "triangle\Triangle.vcxproj", "{9D707957-24B0-44C9-8753-1CAC5CAE27A5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "triangle", "Triangle\Triangle.vcxproj", "{9D707957-24B0-44C9-8753-1CAC5CAE27A5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rectangle", "Rectangle\Rectangle.vcxproj", "{E21F48B6-996E-4287-8C0D-21A0C0BBAE04}"
 EndProject
