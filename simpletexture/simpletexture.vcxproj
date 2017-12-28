@@ -152,8 +152,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\thirddep\stb_image\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="stbimageuse.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
