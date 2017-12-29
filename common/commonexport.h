@@ -4,3 +4,5 @@
 #else
 #define COMMON_EXPORT __declspec(dllimport)
 #endif
+
+#define COMMON_EXPORT 

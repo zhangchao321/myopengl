@@ -1,12 +1,11 @@
 #pragma once
 #include "commonexport.h" 
 #include <string>
-#include <glad/glad.h> 
 
 class COMMON_EXPORT Shader
 {
 public:
-	Shader(const GLchar* vertexPath, const GLchar* fragmentPath );
+	Shader(const char* vertexPath, const char* fragmentPath );
 
 public:
 	void use();

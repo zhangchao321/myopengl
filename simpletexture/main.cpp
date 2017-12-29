@@ -1,6 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h> 
 #include <iostream> 
+#include <stdlib.h>
+#include <direct.h>
 #include "stb_image.h"
 #include "shader.h" 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -37,7 +39,12 @@ int main(int argc, char* argv[])
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	Shader ourShader("./data/shaders/simpletexture/simpletexture.vs", "./data/shaders/simpletexture/simpletexture.fs");
+	char buffer[256];
+	_getcwd(buffer, 256);
+	std::string workDir = std::move(std::string(buffer) );
+	std::string vShaderPath = workDir + "/data/shaders/simpletexture/simpletexture.vs";
+	std::string fShaderPath = workDir + "/data/shaders/simpletexture/simpletexture.fs";
+	Shader ourShader(vShaderPath.c_str(), fShaderPath.c_str() );
 
 
 	int width, height, nrChannels;
@@ -81,7 +88,7 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	// 4. 设定顶点属性指针
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));

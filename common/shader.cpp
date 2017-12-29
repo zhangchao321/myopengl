@@ -2,7 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
+#include <glad/glad.h> 
+Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	std::string vertexCode;
 	std::string fragmentCode;
@@ -37,7 +38,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	unsigned int vertex, fragment;
 	int success;
 	char infoLog[512];
-	vertex = glCreateShader(GL_VERTEX_SHADER);
+	vertex = glCreateShader(GL_VERTEX_SHADER );
 	glShaderSource(vertex, 1, &vShaderCode, nullptr);
 	glCompileShader(vertex);
 
@@ -46,7 +47,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	{
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	};
+	}
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fShaderCode, nullptr);
