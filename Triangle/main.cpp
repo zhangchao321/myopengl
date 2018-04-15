@@ -45,6 +45,15 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	// glMapBuffer and glUnMapBuffer
+	/*unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_COPY_WRITE_BUFFER, VBO);
+	glBufferData(GL_COPY_WRITE_BUFFER, sizeof(vertices), nullptr, GL_STATIC_DRAW);
+	void * data = glMapBuffer(GL_COPY_WRITE_BUFFER, GL_WRITE_ONLY);
+	memcpy(data, vertices, sizeof(vertices));
+	glUnmapBuffer(GL_COPY_WRITE_BUFFER);*/
+
 	char* verStr = "#version 330 core \n"\
 		"layout(location =0) in vec3 aPos;\n"\
 		"void main()\n"\
