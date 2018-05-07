@@ -1,9 +1,8 @@
 #pragma once
-#include "commonexport.h" 
 #include <string>
 #include <glm/glm.hpp>
 
-class COMMON_EXPORT Shader
+class Shader
 {
 public:
 	Shader(const char* vertexPath, const char* fragmentPath );
