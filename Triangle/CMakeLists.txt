@@ -30,6 +30,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR}  
 ${ThirdDepDir}/glad/include 
 ${ThirdDepDir}/glfw/include
+${ThirdDepDir}/assimp-3.3.1/include
 ${ThirdDepDir}/glm-0.9.8
 ${ThirdDepDir}/stb_image)
  
@@ -45,5 +46,6 @@ add_executable(triangle
 target_link_libraries(triangle 
 ${ThirdDepDir}/glad/lib/Debug/glad.lib 
 ${ThirdDepDir}/glfw/lib/Debug/glfw3.lib 
+${ThirdDepDir}/assimp-3.3.1/lib/*.lib
 opengl32.lib) 
 
