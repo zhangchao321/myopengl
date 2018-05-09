@@ -73,6 +73,7 @@ int main()
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 	 
 	char buffer[256];
 	_getcwd(buffer, 256);
@@ -81,7 +82,7 @@ int main()
 	Shader ourShader((workDir + std::string("/data/shaders/mesh/model_loading.vs")).c_str(),
 		(workDir + std::string("/data/shaders/mesh/model_loading.fs")).c_str());
 
-	Model ourModel(workDir+"/data/obj/nanosuit/nanosuit.obj");
+	Model ourModel(workDir+"/data/obj/nanosuit/nanosuit.obj",false);
 
 
 	// draw in wireframe
@@ -91,6 +92,7 @@ int main()
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+		//glDepthMask(GL_FALSE);
 		// per-frame time logic
 		// --------------------
 		float currentFrame = glfwGetTime();
