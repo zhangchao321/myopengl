@@ -32,22 +32,13 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
 int main()
-{
-    // glfw: initialize and configure
-    // ------------------------------
+{ 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
-#endif
-
-    // glfw window creation
-    // --------------------
+ 
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -58,12 +49,9 @@ int main()
     glfwMakeContextCurrent(window); 
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
-
-    // tell GLFW to capture our mouse
+	 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
+	 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -73,14 +61,10 @@ int main()
 	char buffer[256];
 	_getcwd(buffer, 256);
 	std::string workDir = std::move(std::string(buffer));
-
-    // build and compile shaders
-    // -------------------------
+	 
     Shader shader((workDir+"/data/shaders/cubemap/cubemap.vs").c_str(), 
 		(workDir + "/data/shaders/cubemap/cubemap.fs").c_str());
-      
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
+       
     float cubeVertices[] = {
         // positions        
         -0.5f, -0.5f, -0.5f,
@@ -144,16 +128,12 @@ int main()
 	paths.push_back(workDir + "/data/images/skybox/front.jpg");
 	paths.push_back(workDir + "/data/images/skybox/back.jpg");
 
-	unsigned int cubeTexture =loadCubeTexture(paths);
-    // shader configuration
-    // --------------------
+	unsigned int cubeTexture =loadCubeTexture(paths); 
     shader.use();
     shader.setInt("cubeTexture", 0);
 	glDisable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window))
-    {
-        // per-frame time logic
-        // --------------------
+    { 
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -183,10 +163,7 @@ int main()
     glDeleteVertexArrays(1, &cubeVAO);  
     glfwTerminate();
     return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+} 
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -201,10 +178,7 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
 }
-
-
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
+ 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
     if (firstMouse)
@@ -215,23 +189,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - ypos;
 
     lastX = xpos;
     lastY = ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+ 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
    // camera.ProcessMouseScroll(yoffset);
 }
-
-// utility function for loading a 2D texture from file
-// ---------------------------------------------------
+ 
 unsigned int loadCubeTexture(const std::vector<std::string> cubeImagePath)
 {
     unsigned int textureCube;
@@ -262,8 +232,9 @@ unsigned int loadCubeTexture(const std::vector<std::string> cubeImagePath)
 			stbi_image_free(data);
 		}
 	}
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
