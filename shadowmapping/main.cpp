@@ -168,7 +168,7 @@ private:
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 // Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 4.2f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -235,17 +235,19 @@ public:
 		glDeleteTextures(1, &boxTexture);
 	}
 
-	void render(const Shader &shader)
+	void bindTexture()
 	{
-		shader.use();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
+	}
 
+	void render(const Shader &shader)
+	{ 
 		glm::mat4 model;
 		shader.setMat4("model", model);
 		plane->render();
 
-		glBindTexture(GL_TEXTURE_2D, boxTexture);
+		//glBindTexture(GL_TEXTURE_2D, boxTexture);
 		model = glm::mat4();
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
 		shader.setMat4("model", model);
@@ -327,7 +329,8 @@ int main()
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -385,7 +388,11 @@ int main()
 		processInput(window);
 		glfwPollEvents();
 
-		
+		// Change light position over time
+		///*lightPos.x = sin(glfwGetTime()) * 3.0f;
+		//lightPos.z = cos(glfwGetTime()) * 2.0f;
+		//lightPos.y = 5.0 + cos(glfwGetTime()) * 0.1f;*/
+
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
 		GLfloat near_plane = 1.0f, far_plane = 7.5f;
@@ -397,12 +404,16 @@ int main()
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
+		//scene.bindTexture();
 		scene.render(depthShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader.use();
+		shader.setInt("diffuseTexture", 0);
+		shader.setInt("shadowMap", 1);
+		scene.bindTexture();
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -438,7 +449,6 @@ void processInput(GLFWwindow *window)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	
 	if (firstMouse)
 	{
 		lastX = xpos;
@@ -446,15 +456,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		firstMouse = false;
 	}
 
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos;
+	GLfloat xoffset = xpos - lastX;
+	GLfloat yoffset = lastY - ypos;
 
 	lastX = xpos;
-	lastY = ypos; 
-	camera.ProcessMouseMovement(xoffset, yoffset,false);
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	// camera.ProcessMouseScroll(yoffset);
+	 camera.ProcessMouseScroll(yoffset);
 } 

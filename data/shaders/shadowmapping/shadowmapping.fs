@@ -10,6 +10,8 @@ in vec4 v_fragPosLightSpace;
 uniform sampler2D diffuseTexture;
 uniform sampler2D shadowMap;
 
+
+
 uniform vec3 lightPos;
 uniform vec3 viewPos;
   
@@ -59,8 +61,8 @@ void main()
     vec3 specular = spec * lightColor; 
 
     float shadow =ShadowCalculation(v_fragPosLightSpace);                      
-    shadow = min(shadow, 0.75); // reduce shadow strength a little: allow some diffuse/specular light in shadowed regions
+    shadow = min(shadow, 0.75); 
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
     
-    outColor = vec4(lighting, 1.0f);
+    outColor = vec4(lighting,1.0f);
 }
