@@ -1,17 +1,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include <shader_m.h>
 #include <camera.h>
-#include <model.h>
-#include <vector>
-#include <array>
-
+#include <model.h> 
 #include <iostream>
 #include <direct.h>
 
@@ -186,7 +181,7 @@ public:
 		char buffer[256];
 		_getcwd(buffer, 256);
 		std::string workDir = std::move(std::string(buffer));
-		planeTexture = loadTexture(workDir + "/data/images/wood.png");
+		planeTexture = loadTexture(workDir + "/data/images/plane.jpg");
 		if (planeTexture == 10000)
 		{
 			std::cout << "Load texture failed!" << std::endl;
@@ -195,7 +190,7 @@ public:
 		plane = new Plane;
 		plane->prepareData();
 
-		boxTexture = loadTexture(workDir + "/data/images/wood.png");
+		boxTexture = loadTexture(workDir + "/data/images/box.png");
 		if (boxTexture == 10000)
 		{
 			std::cout << "Load texture failed!" << std::endl;
@@ -234,20 +229,17 @@ public:
 		glDeleteTextures(1, &planeTexture);
 		glDeleteTextures(1, &boxTexture);
 	}
-
-	void bindTexture()
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, planeTexture);
-	}
+	 
 
 	void render(const Shader &shader)
 	{ 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, planeTexture);
 		glm::mat4 model;
 		shader.setMat4("model", model);
 		plane->render();
 
-		//glBindTexture(GL_TEXTURE_2D, boxTexture);
+		glBindTexture(GL_TEXTURE_2D, boxTexture);
 		model = glm::mat4();
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
 		shader.setMat4("model", model);
@@ -318,7 +310,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "ShadowMapping", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -413,7 +405,6 @@ int main()
 		shader.use();
 		shader.setInt("diffuseTexture", 0);
 		shader.setInt("shadowMap", 1);
-		scene.bindTexture();
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);

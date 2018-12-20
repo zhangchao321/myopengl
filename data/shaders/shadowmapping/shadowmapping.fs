@@ -9,36 +9,31 @@ in vec4 v_fragPosLightSpace;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D shadowMap;
-
-
-
 uniform vec3 lightPos;
 uniform vec3 viewPos;
-  
+ 
 float ShadowCalculation(vec4 fragPosLightSpace)
 { 
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w; 
-    projCoords = projCoords * 0.5 + 0.5; 
-    float closestDepth = texture(shadowMap, projCoords.xy).r;  
-    float currentDepth = projCoords.z; 
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w; //深度除法，获取在投影空间的坐标
+    projCoords = projCoords * 0.5 + 0.5; //将位置数据归一化到0-1之间 
+    float currentDepth = projCoords.z; //获取当前位置的当前深度
     vec3 normal = normalize(v_normal);
     vec3 lightDir = normalize(lightPos - v_fragPos);
-    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005); 
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005); //计算阴影偏移系数
     float shadow = 0.0;
-    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);//纹理坐标和纹理大小的映射系数，一个像素所对应的纹理坐标长度为texelSize
+	//对当前像素所对应的9个最近深度采样
     for(int x = -1; x <= 1; ++x)
     {
         for(int y = -1; y <= 1; ++y)
         {
             float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+            shadow += (currentDepth - bias) > pcfDepth  ? 1.0 : 0.0;        
         }    
     }
     shadow /= 9.0;
-     
     if(projCoords.z > 1.0)
         shadow = 0.0;
-        
     return shadow;
 }
 
@@ -46,7 +41,7 @@ void main()
 {           
     vec3 color = texture(diffuseTexture, v_texCoords).rgb;
     vec3 normal = normalize(v_normal);
-    vec3 lightColor = vec3(0.4); 
+    vec3 lightColor = vec3(0.9); 
 
     vec3 ambient = 0.2 * color;
 
